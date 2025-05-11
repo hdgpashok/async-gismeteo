@@ -1,17 +1,14 @@
 import asyncio
 import json
 from aiohttp import ClientSession, web
-from get_translation import get_translation
 from get_weather import get_weather
 
 
 async def handler(request):
-    city_ru = request.rel_url.query['city']
-    city_eng = await get_translation(city_ru, 'ru', 'end')
+    city = request.rel_url.query['city']
 
-    weather_eng = await get_weather(city_eng)
-    weather_ru = await get_translation(weather_eng, 'end', 'ru')
+    weather = await get_weather(city)
 
-    result = {'city' : city_ru, 'weather' : weather_ru}
+    result = {'city': city, 'weather': weather}
 
-    return web.Response(text=json.dumps(result, ensure_ascii= False))
+    return web.Response(text=json.dumps(result, ensure_ascii=False))
